@@ -1,0 +1,100 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Demo chart</title>
+</head>
+<body>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
+<script type="text/javascript" src="https://code.highcharts.com/modules/exporting.js"></script>
+<style type="text/css">
+    $ {
+        demo .css;
+    }
+</style>
+<script type="text/javascript">
+    $(function () {
+        $('#container').highcharts({
+            title: {
+                text: 'Demo',
+                x: -20 //center
+            },
+            subtitle: {
+                text: 'Source: plc.com',
+                x: -20
+            },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                title: {
+                    text: 'Số lượng'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: 'Qty'
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: 'Hung Yen',
+                data: (function () {
+                    var kq = [];
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("LoadOrder", "Demo")',
+                        data: {location: "HY"},
+                        async: false,
+                        success: function (result) {
+                            console.log("HY", result);
+                            if (result.Items != null) {
+                                kq = result.Items;
+                            }
+                        }
+                    });
+                    return kq;
+                }())
+            }, {
+                name: 'Ha Noi',
+                data: (function () {
+                    var kq = [];
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("LoadOrder", "Demo")',
+                        data: {location: "HN"},
+                        async: false,
+                        success: function (result) {
+                            console.log("HN", result);
+                            if (result.Items != null) {
+                                kq = result.Items;
+                            }
+                        }
+                    });
+                    return kq;
+                }())
+            }]
+        });
+    });
+</script>
+
+<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+</body>
+</html>
